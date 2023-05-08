@@ -1,26 +1,38 @@
 ﻿using delegates;
+using System;
+using System.Runtime.CompilerServices;
 using System.Timers;
 
 public delegate void ProgramConverterCallback(double value);
 public delegate void TimerEmittedValueCallback(string s);
 public delegate void TemperatureTimerCallback(Temperature s);
-public class TemperatureSensor
+
+public interface ISensor
+{
+    event TemperatureTimerCallback TemperatureTimerCallback;
+    public void Start();
+    public void Stop();
+}
+
+public class TemperatureSensor : ISensor
 {
     public event ProgramConverterCallback EmittedValueCallback;
-
     public event TemperatureTimerCallback TemperatureTimerCallback;
 
+    System.Timers.Timer Timer;
 
 
 
     public TemperatureSensor(ProgramConverterCallback pic)
     {
         this.EmittedValueCallback = pic;
-       
 
-        System.Timers.Timer timer = new System.Timers.Timer(5000);
 
-        timer.Elapsed += (object? sender, ElapsedEventArgs elapsedEventArgs) =>
+        Timer = new System.Timers.Timer(5000);
+
+        Timer.Elapsed += OnTimerElapsed;
+       /*
+        (object? sender, ElapsedEventArgs elapsedEventArgs) =>
         {
             Random random = new Random();
             double d;
@@ -32,15 +44,30 @@ public class TemperatureSensor
            Temperature t = new Temperature(((random.NextDouble() * 20.0) + 4.0), "Traismauer");
             this.TemperatureTimerCallback?.Invoke(t);
 
-        };
-        timer.Start();
+        }; */
+        Timer.Start();
 
 
     }
 
+    public TemperatureSensor()
+    {
+       
+
+        Timer = new System.Timers.Timer(5000);
+
+        Timer.Elapsed += OnTimerElapsed;
+
+
+    }
+    private void OnTimerElapsed(object? sender, System.Timers.ElapsedEventArgs e)
+    {
+        Random random = new Random();
+        Temperature t = new Temperature(((random.NextDouble() * 20.0) + 4.0), "Traismauer");
+        this.TemperatureTimerCallback?.Invoke(t);
+    }
     static void Main(String[] args)
     {
-        //cration of a TemperatureSenson
         TemperatureSensor p = new TemperatureSensor((double value) =>
         {
             Console.WriteLine("converted Value " + value * 3);
@@ -57,9 +84,44 @@ public class TemperatureSensor
         };
 
 
+
+
+        List<ISensor> temperatureSensors = new List<ISensor>
+        {
+            new TemperatureSensor(),
+            new TemperatureSensor(),
+            new TemperatureSensor()
+
+        };
+        foreach(var sensor in temperatureSensors)
+        {
+            sensor.TemperatureTimerCallback += OnTimerCallback;
+            sensor.Start();
+        }
+
+
         Console.ReadLine();
+
+        foreach (var sensor in temperatureSensors)
+        {
+            Console.WriteLine("Sensor stopped");
+            sensor.Stop();
+        }
 
     }
 
-    
+    private static void OnTimerCallback(Temperature s)
+    {
+        Console.WriteLine("Temperature: " + s);
+    }
+
+    public void Start()
+    {
+        this.Timer.Start();
+    }
+
+    public void Stop()
+    {
+        this.Timer.Stop(); 
+    }
 }
