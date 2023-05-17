@@ -8,6 +8,7 @@ using System;
 using System.Timers;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
 using TimerApp.Commands;
 
 namespace TimerApp.ViewModel
@@ -25,7 +26,7 @@ namespace TimerApp.ViewModel
 
         public ICommand StartCommand { get; private set; }
 
-        private Timer timer { get; set; }
+        private DispatcherTimer timer { get; set; }
 
         private TimeSpan time;
         public TimeSpan Time
@@ -47,23 +48,39 @@ namespace TimerApp.ViewModel
         public MainViewModel()
         {
 
-            timer = new System.Timers.Timer(1000); // DispatcherTImer
+            timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromSeconds(1);
+
+            ;
+
+
             Time = TimeSpan.FromMinutes(1);
 
             this.DecreaseDateCommand = new AsyncDelegateCommand((object? obj) => Task.Run(() => { Time = Time.Add(TimeSpan.FromSeconds(-1)); }));
 
             this.IncreaseDateCommand = new AsyncDelegateCommand((object? obj) => Task.Run(() => { Time = Time.Add(TimeSpan.FromSeconds(1)); }));
 
-            this.StartCommand = new AsyncDelegateCommand((object? _) => Task.Run(() => timer.Start()));
+            this.StartCommand = new AsyncDelegateCommand((object? _) => Task.Run(() => {
 
+                if (!timer.IsEnabled)
+                {
+                    timer.Start();
+                }
+
+                else {
+                    timer.Stop();
+                }
+               
+                
+                
+              }));
 
              
-            timer.Elapsed += (sender, e) => TimerDelegate?.Invoke();
-            timer.AutoReset = true; 
+            timer.Tick += (sender, e) => TimerDelegate?.Invoke();
            
 
 
-            TimerDelegate += () =>
+            TimerDelegate = () =>
             {
                 Time = Time.Add(TimeSpan.FromSeconds(-1));
             };
