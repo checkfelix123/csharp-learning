@@ -41,8 +41,33 @@ namespace TimerApp.ViewModel
                 {
                     time = value;
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Time)));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DisplayText)));
                 }
             }
+        }
+
+        public string DisplayText
+            {
+                get
+                {
+                    if(Time.TotalMilliseconds > 0)
+                    {
+                        return Time.ToString();
+                    }
+                    else
+                    {
+                        timer.Stop();
+                        return "Zeit abgelaufen";
+
+
+                    }
+
+                 }
+                set
+                {
+                   
+                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DisplayText)));
+                }
         }
 
         public MainViewModel()

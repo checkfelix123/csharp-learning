@@ -34,7 +34,7 @@
         </Button>
 
         <!--<Button Grid.Column="0" HorizontalAlignment="Left" Command="IncreaseDateCommand"  Content="+"/>-->
-        <TextBlock  Grid.Column="1" Text="{Binding Time}" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+        <TextBlock  Grid.Column="1" Text="{Binding DisplayText}" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
         <Button   Grid.Column="1" Content="Start Timer" Command="{Binding StartCommand}" HorizontalAlignment="Center" VerticalAlignment="Bottom" ></Button>
         <Button Grid.Column="2" HorizontalAlignment="Right" Command="{Binding Path=IncreaseDateCommand }"  Content="+" />
     </Grid>
