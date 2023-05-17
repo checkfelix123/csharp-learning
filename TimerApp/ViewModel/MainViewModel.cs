@@ -63,11 +63,7 @@ namespace TimerApp.ViewModel
                     }
 
                  }
-                set
-                {
-                   
-                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DisplayText)));
-                }
+                
         }
 
         public MainViewModel()
