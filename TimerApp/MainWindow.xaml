@@ -5,14 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
        xmlns:converters="clr-namespace:TimerApp.Converter" xmlns:viewmodel="clr-namespace:TimerApp.ViewModel" d:DataContext="{d:DesignInstance Type=viewmodel:MainViewModel}"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="600">
-   
+        Title="MainWindow" Height="450" Width="720">
+
 
     <Window.Resources>
         <converters:DateToStringConverter x:Key="DateToStringConverter" />
 
         <Style TargetType="{x:Type Button}">
-            <Setter Property="Background" Value="Yellow" />
+            <Setter Property="Background" Value="Gray" />
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="FontStyle" Value="Italic" />
@@ -20,24 +20,22 @@
             </Style.Triggers>
         </Style>
     </Window.Resources>
-   
+
     <Grid>
-        
+
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition  Width="100"></ColumnDefinition>
-            <ColumnDefinition  Width="400"></ColumnDefinition>
-            <ColumnDefinition  Width="100"></ColumnDefinition>
+            <ColumnDefinition  Width="*"></ColumnDefinition>
+            <ColumnDefinition  Width="520"></ColumnDefinition>
+            <ColumnDefinition  Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <Button Grid.Column="0" HorizontalAlignment="Left" Command="{Binding  Path=DecreaseDateCommand}"  Content="  -  ">
-
-           
+        <Button Grid.Column="0" HorizontalAlignment="Left" Command="{Binding  Path=DecreaseDateCommand}"  Content="-">
         </Button>
 
         <!--<Button Grid.Column="0" HorizontalAlignment="Left" Command="IncreaseDateCommand"  Content="+"/>-->
-        <TextBlock  Grid.Column="1" Text="{Binding Time}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <Button   Grid.Column="1" Content="Start Timer" Command="{Binding StartCommand}" HorizontalAlignment="Center" VerticalAlignment="Bottom"></Button>
-        <Button Grid.Column="2" HorizontalAlignment="Right" Command="{Binding Path=IncreaseDateCommand }"  Content="   +   "/>
+        <TextBlock  Grid.Column="1" Text="{Binding Time}" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+        <Button   Grid.Column="1" Content="Start Timer" Command="{Binding StartCommand}" HorizontalAlignment="Center" VerticalAlignment="Bottom" ></Button>
+        <Button Grid.Column="2" HorizontalAlignment="Right" Command="{Binding Path=IncreaseDateCommand }"  Content="+" />
     </Grid>
 </Window>
